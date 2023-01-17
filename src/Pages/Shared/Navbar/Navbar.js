@@ -15,7 +15,7 @@ const Navbar = () => {
         <li><a>Appointment</a></li>
       </ul>
     </div>
-    <Link to = "/" className=" normal-case text-xl">dentaloC</Link>
+    <Link to = "/" className="normal-case font-extrabold text-xl">dentaloC</Link>
   </div>
   <div className="navbar-center hidden lg:flex">
     <ul className="menu menu-horizontal px-1">
