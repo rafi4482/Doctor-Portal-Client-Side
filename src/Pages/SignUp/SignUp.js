@@ -1,25 +1,39 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthProvider';
 
 const SignUp = () => {
-    const { createUser } = useContext(AuthContext);
+    const { createUser, updateUser } = useContext(AuthContext);
 
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [signUpError, setSignUPError] = useState('');
-    const [createdUserEmail, setCreatedUserEmail] = useState('')
+    const [signUpError, setSignUPError] = useState("");
+    const [createdUserEmail, setCreatedUserEmail] = useState("")
     const navigate = useNavigate();
 
     const handleSignUp = (data) => {
+        setSignUPError("");
         console.log(data)
         createUser(data.email, data.password)
             .then(result => {
                 const user = result.user
                 console.log(user)
-            }
-            )
-            .catch(error => console.log(error))
+                toast("User created")
+                const userInfo = {
+                    displayName: data.name
+                }
+                updateUser(userInfo)
+                    .then(() => {
+
+                    })
+                    .catch(err => console.log(err));
+            })
+            .catch(error => {
+                console.log(error)
+                setSignUPError(error.message)
+
+            });
     }
 
 
@@ -53,7 +67,7 @@ const SignUp = () => {
                         {errors.password && <p className='text-red-500'>{errors.password.message}</p>}
                     </div>
                     <input className='btn btn-accent w-1/2 mt-4' value="Sign Up" type="submit" />
-                    {signUpError && <p className='text-red-600'>{signUpError}</p>}
+                    {signUpError && <p className='text-red-600 mt-4'>Email already exists!</p>}
                 </form>
                 <p className="mt-4">Already have an account? <Link className='text-secondary mt-4' to="/login">Login here</Link></p>
                 <div className="divider">OR</div>
